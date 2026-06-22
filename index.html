@@ -215,6 +215,8 @@ const {
   useState,
   useMemo
 } = React;
+const VERSION = "1.0.0";
+const AUTHOR = "ROBERTO ESCOBAR CITTY";
 const INTERESTS = ["Viajar", "Café", "Fitness", "Música", "Cocina", "Cine", "Senderismo", "Arte", "Fotografía", "Yoga", "Gaming", "Vino", "Lectura", "Playa", "Perros", "Baile"];
 const INTENTS = ["Cualquiera", "Algo serio", "Algo casual", "Conocer gente"];
 const PROFILES = [{
@@ -576,7 +578,7 @@ function Landing({
     href: "#"
   }, "Cookies"))))), /*#__PURE__*/React.createElement("div", {
     className: "foot-bottom"
-  }, /*#__PURE__*/React.createElement("span", null, "© 2026 Vibra. Todos los derechos reservados."), /*#__PURE__*/React.createElement("span", null, "Hecho con 💙 en Miami")))));
+  }, /*#__PURE__*/React.createElement("span", null, "© 2026 Vibra · v", VERSION), /*#__PURE__*/React.createElement("span", null, "Hecho por ", AUTHOR)))));
 }
 
 /* ================= AUTH MODAL ================= */
