@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+
+# iCloud
+*.icloud
+
+# Editores
+.vscode/
+.idea/
+*.swp
+
+# Logs / temporales
+*.log
+node_modules/
