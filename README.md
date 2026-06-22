@@ -1,47 +1,50 @@
-# Spark — Prototipo de Dating
+# Vibra — Sitio web de citas
 
-Prototipo navegable de una app de citas estilo **Tinder + Match** (swipe + filtros), construido en React. Diseñado mobile-first pensando en la futura app para celular.
+Sitio web de citas estilo landing moderna (inspirado en tinder.com), con paleta azul → turquesa. Ancho completo, no es un marco de teléfono. Construido en React (pre-compilado, sin Babel) pensando en la futura app móvil.
 
 ## Cómo abrirlo
 
-Haz doble clic en `index.html` (se abre en cualquier navegador). No requiere instalación. Necesita internet para cargar React y las fotos de ejemplo.
-
-> Tip: en Chrome/Safari activa la vista móvil (F12 → ícono de celular) para verlo como en un teléfono.
+Doble clic en `index.html` (cualquier navegador). Necesita internet para cargar React y las fotos de ejemplo.
 
 ## Qué incluye
 
-- **Swipe de cartas**: arrastra con el mouse/dedo a la derecha (LIKE) o izquierda (NOPE), con sellos animados.
-- **Botones de acción**: deshacer, nope, super like (★), me gusta (♥), boost.
-- **Filtros de búsqueda**: género, rango de edad, distancia, intención (serio/casual/conocer gente) e intereses.
-- **Pantalla de matches/likes**: cuadrícula con las personas a las que diste like, marca de "nuevo" y "super".
-- **Popup "¡Es un match!"**: aparece cuando hay match mutuo (simulado).
-- **Navegación inferior**: descubrir, filtros, matches.
+Una sola página con dos grandes vistas:
 
-## Referencias de diseño (investigación)
+**1. Landing (página de inicio)**
+- Barra de navegación fija con logo, menú e botones *Iniciar sesión* / *Crear cuenta*.
+- Hero a pantalla completa con degradado azul-turquesa, titular y tarjetas de perfil.
+- Sección "Cómo funciona" (3 pasos).
+- Sección "Por qué Vibra" (4 funciones).
+- "Historias Vibra" (testimonios con foto).
+- Banda de llamada a la acción + footer completo.
 
-- **Tinder** — mecánica de swipe, volumen de perfiles, foto primero. ~75M usuarios/mes.
-- **Hinge** — perfiles con prompts e intereses, enfoque en relaciones serias.
-- **Bumble** — la mujer escribe primero, modos BFF/Bizz.
-- **Match.com** — búsqueda con filtros detallados, relaciones serias.
+**2. Login / Registro**
+- Modal con pestañas Iniciar sesión / Registrarse (simulado). Cualquier dato lleva a Explorar.
+
+**3. Explorar (la app dentro del website)**
+- Layout web de ancho completo: panel de filtros a la izquierda + tarjeta de perfil grande a la derecha.
+- Filtros: género, edad, distancia, intención e intereses.
+- Botones Pasar / Super like / Me gusta.
+- Pestaña de Matches con cuadrícula.
+- Popup "¡Es un match!".
+
+## Marca
+
+- Nombre: **Vibra**
+- Colores: degradado azul `#1b66ff` → turquesa `#10d6c2`
 
 ## Datos
 
-Los 12 perfiles de ejemplo están en el array `PROFILES` dentro de `index.html`. Edita ahí para cambiar nombres, fotos, intereses, etc. Las fotos vienen de randomuser.me (demo).
+Los perfiles de ejemplo están en el array `PROFILES` dentro de `index.html`. Fotos de randomuser.me y Unsplash (demo).
+
+## Publicar (GitHub + Render)
+
+1. Guarda cambios y sube a GitHub:
+   ```bash
+   git add -A && git commit -m "rediseño: sitio web Vibra" && git push
+   ```
+2. En Render (Static Site) el sitio se redespliega solo. Build Command vacío, Publish Directory `.`.
 
 ## Próximos pasos hacia la app móvil
 
-1. **Backend / base de datos** — registro, login, perfiles reales, fotos subidas (ej. Supabase o Firebase).
-2. **Algoritmo de matching** — guardar likes y detectar matches mutuos reales (no simulados).
-3. **Chat** — mensajería entre matches.
-4. **Geolocalización** — distancia real basada en GPS.
-5. **Migrar a React Native** — el código ya está en componentes React, lo que facilita el port a app iOS/Android.
-6. **Moderación y seguridad** — verificación de fotos, reportes, bloqueo.
-
-## Estructura del código (`index.html`, un solo archivo)
-
-- `App` — estado global, filtros y tabs.
-- `Deck` / `SwipeCard` — la pila de cartas y la lógica de arrastre.
-- `Actions` — botones inferiores.
-- `Filters` — panel de filtros.
-- `Matches` — cuadrícula de likes.
-- `MatchPopup` — modal de match.
+Backend real (login + perfiles + matches guardados), chat, geolocalización, y migración a React Native reutilizando estos componentes.

@@ -2,112 +2,210 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>Spark — Dating Prototype</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Vibra — Conecta con tu vibra</title>
+<meta name="description" content="Vibra es la forma más fácil de conocer gente nueva, hacer match y empezar algo real." />
+<meta name="theme-color" content="#1b66ff" />
 <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
 <style>
   :root{
-    --pink:#fd297b; --orange:#ff5864; --purple:#8a2be2;
-    --grad:linear-gradient(135deg,#fd297b 0%,#ff5864 50%,#ff655b 100%);
-    --bg:#f5f5f7; --card-shadow:0 12px 40px rgba(0,0,0,.18);
-    --ink:#222; --muted:#8a8a8f;
+    --c1:#1b66ff; --c2:#10d6c2;
+    --grad:linear-gradient(120deg,#1b66ff 0%,#1aa6e0 55%,#10d6c2 100%);
+    --grad-soft:linear-gradient(120deg,#eef4ff,#e7fbf7);
+    --ink:#10183a; --muted:#69708a; --line:#e7e9f2; --card:#ffffff;
+    --radius:18px;
   }
-  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
-  html,body{height:100%}
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#e9e9ee;color:var(--ink);overflow:hidden}
-  #root{height:100vh;display:flex;align-items:center;justify-content:center}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:#fff;line-height:1.5}
+  a{color:inherit;text-decoration:none}
+  img{display:block;max-width:100%}
+  .wrap{width:100%;max-width:1180px;margin:0 auto;padding:0 24px}
+  .btn{border:none;cursor:pointer;font-weight:700;border-radius:40px;font-size:15px;padding:13px 26px;transition:transform .12s,box-shadow .12s,opacity .12s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-primary{background:var(--grad);color:#fff;box-shadow:0 8px 22px rgba(27,102,255,.32)}
+  .btn-white{background:#fff;color:var(--c1)}
+  .btn-ghost{background:transparent;border:2px solid rgba(255,255,255,.8);color:#fff}
+  .btn-dark{background:var(--ink);color:#fff}
+  .btn-block{display:block;width:100%}
 
-  /* phone frame */
-  .phone{position:relative;width:100%;max-width:430px;height:100vh;max-height:932px;background:var(--bg);
-    display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.25)}
-  @media(min-width:480px){.phone{border-radius:38px;height:92vh;margin:0 auto}}
+  /* ===== NAV ===== */
+  header.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .logo{font-weight:900;font-size:26px;letter-spacing:-1px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .logo .dot{color:var(--c2)}
+  .nav-links{display:flex;gap:28px;align-items:center}
+  .nav-links a{font-weight:600;font-size:15px;color:#43496a}
+  .nav-links a:hover{color:var(--c1)}
+  .nav-right{display:flex;gap:12px;align-items:center}
+  .link-btn{background:none;border:none;font-weight:700;font-size:15px;color:var(--c1);cursor:pointer}
+  @media(max-width:820px){.nav-links{display:none}}
 
-  /* header */
-  .topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 10px;background:#fff;border-bottom:1px solid #eee;z-index:5}
-  .logo{font-weight:800;font-size:24px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-.5px}
-  .icon-btn{border:none;background:transparent;font-size:22px;cursor:pointer;color:#9a9a9f;width:40px;height:40px;border-radius:50%}
-  .icon-btn:hover{background:#f3f3f6;color:var(--pink)}
+  /* ===== HERO ===== */
+  .hero{position:relative;background:var(--grad);color:#fff;overflow:hidden}
+  .hero::after{content:"";position:absolute;right:-160px;top:-160px;width:520px;height:520px;border-radius:50%;background:rgba(255,255,255,.12)}
+  .hero::before{content:"";position:absolute;left:-120px;bottom:-180px;width:420px;height:420px;border-radius:50%;background:rgba(255,255,255,.10)}
+  .hero-inner{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;padding:72px 0 84px}
+  .hero h1{font-size:62px;line-height:1.03;font-weight:900;letter-spacing:-1.5px;margin-bottom:18px}
+  .hero p.sub{font-size:20px;opacity:.95;max-width:480px;margin-bottom:30px}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+  .hero-trust{margin-top:26px;font-size:14px;opacity:.9;display:flex;align-items:center;gap:10px}
+  .avatars{display:flex}
+  .avatars img{width:34px;height:34px;border-radius:50%;border:2px solid #fff;object-fit:cover;margin-left:-10px}
+  .avatars img:first-child{margin-left:0}
+  /* hero card stack */
+  .hero-art{position:relative;height:440px}
+  .h-card{position:absolute;width:260px;height:360px;border-radius:24px;background-size:cover;background-position:center;box-shadow:0 24px 60px rgba(7,20,60,.35);overflow:hidden}
+  .h-card .hc-info{position:absolute;left:0;right:0;bottom:0;padding:16px;color:#fff;background:linear-gradient(to top,rgba(0,0,0,.7),transparent);font-weight:700}
+  .h-card.c-a{left:calc(50% - 150px);top:30px;transform:rotate(-8deg);z-index:1}
+  .h-card.c-b{left:calc(50% - 110px);top:10px;transform:rotate(7deg);z-index:2}
+  .h-badge{position:absolute;z-index:5;background:#fff;color:var(--c1);font-weight:800;border-radius:30px;padding:8px 14px;box-shadow:0 8px 20px rgba(0,0,0,.18);font-size:14px}
+  .h-badge.like{top:64px;right:36px;color:#16c79a}
+  .h-badge.nope{bottom:74px;left:24px;color:#ff5470}
+  @media(max-width:900px){
+    .hero-inner{grid-template-columns:1fr;text-align:center;padding:52px 0 60px}
+    .hero h1{font-size:44px}
+    .hero p.sub{margin-left:auto;margin-right:auto}
+    .hero-cta{justify-content:center}
+    .hero-trust{justify-content:center}
+    .hero-art{display:none}
+  }
 
-  /* deck */
-  .deck-wrap{flex:1;position:relative;overflow:hidden}
-  .deck{position:absolute;inset:0;padding:14px}
-  .card{position:absolute;inset:14px;border-radius:22px;background:#ddd center/cover no-repeat;box-shadow:var(--card-shadow);
-    overflow:hidden;cursor:grab;user-select:none;will-change:transform;display:flex;flex-direction:column;justify-content:flex-end}
-  .card:active{cursor:grabbing}
-  .card .scrim{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.78) 0%,rgba(0,0,0,.15) 45%,transparent 70%)}
-  .card .info{position:relative;color:#fff;padding:20px 20px 22px;z-index:2}
-  .card .name{font-size:27px;font-weight:700;display:flex;align-items:baseline;gap:10px}
-  .card .name .age{font-size:23px;font-weight:400}
-  .card .meta{font-size:14px;opacity:.92;margin-top:4px;display:flex;align-items:center;gap:6px}
-  .card .bio{font-size:14px;opacity:.92;margin-top:10px;line-height:1.4}
-  .tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
-  .tag{background:rgba(255,255,255,.22);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.35);
-    color:#fff;font-size:12px;padding:5px 11px;border-radius:20px}
-  .intent-pill{display:inline-block;background:rgba(255,255,255,.95);color:var(--pink);font-weight:700;
-    font-size:11px;letter-spacing:.4px;text-transform:uppercase;padding:4px 10px;border-radius:20px;margin-top:10px}
+  /* ===== SECTION GENERIC ===== */
+  section.block{padding:84px 0}
+  .sec-head{text-align:center;max-width:640px;margin:0 auto 52px}
+  .sec-head .eyebrow{color:var(--c1);font-weight:800;letter-spacing:1.5px;text-transform:uppercase;font-size:13px;margin-bottom:12px}
+  .sec-head h2{font-size:40px;font-weight:900;letter-spacing:-1px;margin-bottom:14px}
+  .sec-head p{font-size:18px;color:var(--muted)}
 
-  /* swipe stamps */
-  .stamp{position:absolute;top:38px;font-size:34px;font-weight:900;letter-spacing:2px;padding:6px 16px;
-    border:5px solid;border-radius:12px;opacity:0;z-index:3;transition:opacity .05s}
-  .stamp.like{left:24px;color:#3df27d;border-color:#3df27d;transform:rotate(-18deg)}
-  .stamp.nope{right:24px;color:#ff4458;border-color:#ff4458;transform:rotate(18deg)}
+  /* how it works */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:32px 26px;text-align:center;transition:transform .15s,box-shadow .15s}
+  .step:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(16,24,58,.10)}
+  .step .ic{width:64px;height:64px;border-radius:18px;background:var(--grad-soft);display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 18px}
+  .step h3{font-size:20px;margin-bottom:8px}
+  .step p{color:var(--muted);font-size:15px}
+  @media(max-width:820px){.steps{grid-template-columns:1fr}}
 
-  /* action buttons */
-  .actions{display:flex;align-items:center;justify-content:center;gap:18px;padding:14px 0 20px;background:transparent}
-  .act{width:60px;height:60px;border-radius:50%;border:none;background:#fff;box-shadow:0 6px 18px rgba(0,0,0,.14);
-    font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .12s}
-  .act:hover{transform:scale(1.1)}
-  .act.small{width:48px;height:48px;font-size:20px}
-  .act.nope{color:#ff4458}.act.like{color:#3df27d}.act.star{color:#1ec3ff}.act.rewind{color:#ffb02e}.act.boost{color:#b25cff}
+  /* features alt section */
+  .feat{background:var(--grad-soft)}
+  .feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+  .feat-card{background:#fff;border-radius:var(--radius);padding:26px 22px;border:1px solid var(--line)}
+  .feat-card .ic{font-size:26px;margin-bottom:12px}
+  .feat-card h4{font-size:17px;margin-bottom:6px}
+  .feat-card p{color:var(--muted);font-size:14px}
+  @media(max-width:900px){.feat-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:540px){.feat-grid{grid-template-columns:1fr}}
 
-  /* empty deck */
-  .empty{position:absolute;inset:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;
-    text-align:center;color:var(--muted);gap:14px;padding:30px}
-  .empty h3{color:var(--ink);font-size:20px}
-  .btn{background:var(--grad);color:#fff;border:none;padding:13px 26px;border-radius:30px;font-weight:700;font-size:15px;cursor:pointer}
+  /* stories */
+  .stories{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .story{border-radius:var(--radius);overflow:hidden;position:relative;min-height:380px;background-size:cover;background-position:center;display:flex;align-items:flex-end;box-shadow:0 12px 30px rgba(16,24,58,.12)}
+  .story .st-scrim{position:absolute;inset:0;background:linear-gradient(to top,rgba(7,16,45,.9),transparent 60%)}
+  .story .st-txt{position:relative;z-index:2;color:#fff;padding:24px}
+  .story .st-txt h4{font-size:20px;margin-bottom:6px}
+  .story .st-txt p{font-size:14px;opacity:.92}
+  @media(max-width:900px){.stories{grid-template-columns:1fr}}
 
-  /* bottom nav */
-  .nav{display:flex;background:#fff;border-top:1px solid #eee;padding:10px 0 14px}
-  .nav button{flex:1;border:none;background:transparent;font-size:24px;color:#c4c4cc;cursor:pointer;position:relative}
-  .nav button.active{color:var(--pink)}
-  .badge{position:absolute;top:-2px;right:30%;background:var(--orange);color:#fff;font-size:10px;font-weight:700;
-    min-width:17px;height:17px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+  /* CTA band */
+  .cta-band{background:var(--grad);color:#fff;text-align:center;border-radius:28px;padding:56px 24px;margin:0 auto}
+  .cta-band h2{font-size:38px;font-weight:900;letter-spacing:-1px;margin-bottom:14px}
+  .cta-band p{font-size:18px;opacity:.95;margin-bottom:26px}
 
-  /* filter / matches panels */
-  .panel{position:absolute;inset:0;background:var(--bg);z-index:20;display:flex;flex-direction:column;animation:slideUp .25s ease}
-  @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-  .panel-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;background:#fff;border-bottom:1px solid #eee}
-  .panel-head h2{font-size:19px}
-  .panel-body{flex:1;overflow-y:auto;padding:20px}
-  .field{margin-bottom:26px}
-  .field label{display:block;font-weight:600;font-size:14px;margin-bottom:10px;color:#444}
-  .field .val{color:var(--pink);font-weight:700}
-  input[type=range]{width:100%;accent-color:var(--pink)}
+  /* footer */
+  footer{background:var(--ink);color:#cfd4e6;padding:56px 0 30px}
+  .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:30px;margin-bottom:36px}
+  footer .logo{font-size:24px}
+  footer h5{color:#fff;font-size:14px;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
+  footer ul{list-style:none}
+  footer li{margin-bottom:10px}
+  footer a{color:#aab1cc;font-size:14px}
+  footer a:hover{color:#fff}
+  .foot-bottom{border-top:1px solid rgba(255,255,255,.12);padding-top:22px;font-size:13px;color:#8088a6;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  @media(max-width:820px){.foot-grid{grid-template-columns:1fr 1fr}}
+
+  /* ===== AUTH MODAL ===== */
+  .overlay{position:fixed;inset:0;background:rgba(8,14,38,.55);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;animation:fade .2s}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  .modal{background:#fff;width:100%;max-width:420px;border-radius:24px;padding:34px 30px;position:relative;animation:pop .22s}
+  @keyframes pop{from{transform:translateY(14px) scale(.98);opacity:0}to{transform:none;opacity:1}}
+  .modal .x{position:absolute;top:16px;right:18px;border:none;background:none;font-size:24px;color:#aaa;cursor:pointer}
+  .modal .logo{font-size:30px;text-align:center;margin-bottom:6px}
+  .modal .tagline{text-align:center;color:var(--muted);margin-bottom:22px;font-size:15px}
+  .tabs{display:flex;background:#f1f3fa;border-radius:30px;padding:5px;margin-bottom:22px}
+  .tabs button{flex:1;border:none;background:none;padding:10px;border-radius:26px;font-weight:700;color:#69708a;cursor:pointer}
+  .tabs button.on{background:#fff;color:var(--c1);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+  .form label{display:block;font-size:13px;font-weight:700;margin:14px 0 6px;color:#3f465f}
+  .form input{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;font-size:15px;outline:none}
+  .form input:focus{border-color:var(--c1)}
+  .form .btn{margin-top:20px}
+  .modal .fine{text-align:center;font-size:12px;color:var(--muted);margin-top:16px}
+
+  /* ===== EXPLORE (app dentro del website) ===== */
+  .ex-shell{min-height:100vh;background:#f4f6fb;display:flex;flex-direction:column}
+  .ex-top{position:sticky;top:0;z-index:30;background:#fff;border-bottom:1px solid var(--line)}
+  .ex-top-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .ex-tabs{display:flex;gap:6px;background:#f1f3fa;border-radius:30px;padding:5px}
+  .ex-tabs button{border:none;background:none;padding:9px 20px;border-radius:26px;font-weight:700;color:#69708a;cursor:pointer;font-size:14px}
+  .ex-tabs button.on{background:#fff;color:var(--c1);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+  .ex-av{width:38px;height:38px;border-radius:50%;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;cursor:pointer}
+  .ex-body{flex:1;display:grid;grid-template-columns:300px 1fr;gap:28px;align-items:start;padding:28px 0}
+  @media(max-width:900px){.ex-body{grid-template-columns:1fr}}
+
+  /* filters card */
+  .filters{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px;position:sticky;top:84px}
+  .filters h3{font-size:17px;margin-bottom:18px}
+  .f-field{margin-bottom:20px}
+  .f-field label{display:block;font-weight:700;font-size:13px;margin-bottom:9px;color:#3f465f}
+  .f-field .val{color:var(--c1)}
   .seg{display:flex;gap:8px;flex-wrap:wrap}
-  .seg button{flex:1;min-width:80px;border:1.5px solid #e0e0e6;background:#fff;color:#555;padding:11px;border-radius:12px;font-weight:600;font-size:13px;cursor:pointer}
+  .seg button{flex:1;min-width:64px;border:1.5px solid var(--line);background:#fff;color:#555;padding:9px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer}
   .seg button.on{background:var(--grad);color:#fff;border-color:transparent}
-  .apply{margin:10px 20px 22px}
+  input[type=range]{width:100%;accent-color:var(--c1)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{border:1.5px solid var(--line);background:#fff;color:#555;padding:7px 13px;border-radius:30px;font-size:13px;font-weight:600;cursor:pointer}
+  .chip.on{background:var(--grad);color:#fff;border-color:transparent}
+
+  /* discover main */
+  .discover{display:flex;flex-direction:column;align-items:center}
+  .pcard{width:100%;max-width:460px;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 18px 50px rgba(16,24,58,.16);position:relative}
+  .pcard .photo{position:relative;width:100%;aspect-ratio:4/5;background-size:cover;background-position:center}
+  .pcard .photo .pscrim{position:absolute;inset:0;background:linear-gradient(to top,rgba(7,16,45,.82),transparent 52%)}
+  .pcard .pmeta{position:absolute;left:0;right:0;bottom:0;color:#fff;padding:22px}
+  .pcard .pmeta .nm{font-size:28px;font-weight:800;display:flex;align-items:baseline;gap:10px}
+  .pcard .pmeta .nm .ag{font-size:22px;font-weight:400}
+  .pcard .pmeta .loc{font-size:14px;opacity:.92;margin-top:4px}
+  .ipill{display:inline-block;background:rgba(255,255,255,.95);color:var(--c1);font-weight:800;font-size:11px;letter-spacing:.5px;text-transform:uppercase;padding:4px 11px;border-radius:20px;margin-top:10px}
+  .pbody{padding:18px 22px 6px}
+  .pbody .bio{font-size:15px;color:#384055;margin-bottom:12px}
+  .tags{display:flex;flex-wrap:wrap;gap:8px}
+  .tag{background:#eef4ff;color:var(--c1);font-size:13px;padding:6px 12px;border-radius:20px;font-weight:600}
+  .pactions{display:flex;align-items:center;justify-content:center;gap:18px;padding:18px 0 26px}
+  .act{width:62px;height:62px;border-radius:50%;border:none;background:#fff;box-shadow:0 8px 20px rgba(16,24,58,.16);font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .12s}
+  .act:hover{transform:scale(1.12)}
+  .act.sm{width:50px;height:50px;font-size:20px}
+  .act.pass{color:#ff5470}.act.like{color:#16c79a}.act.star{color:#1b9dff}.act.rewind{color:#ffb02e}
+  .empty{background:#fff;border:1px solid var(--line);border-radius:24px;padding:60px 30px;text-align:center;max-width:460px;width:100%}
+  .empty .big{font-size:54px;margin-bottom:14px}
+  .empty h3{font-size:22px;margin-bottom:8px}
+  .empty p{color:var(--muted);margin-bottom:20px}
 
   /* matches grid */
-  .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .mcard{border-radius:16px;overflow:hidden;position:relative;aspect-ratio:3/4;background:#ddd center/cover;box-shadow:0 4px 14px rgba(0,0,0,.1)}
-  .mcard .mscrim{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7),transparent 55%)}
-  .mcard .mname{position:absolute;bottom:10px;left:12px;color:#fff;font-weight:600;font-size:15px;z-index:2}
-  .new-flag{position:absolute;top:8px;left:8px;background:var(--orange);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;z-index:2}
-  .matches-empty{text-align:center;color:var(--muted);padding:60px 30px}
+  .mtitle{font-size:22px;font-weight:800;margin-bottom:18px}
+  .mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px}
+  .mcard{border-radius:16px;overflow:hidden;position:relative;aspect-ratio:3/4;background-size:cover;background-position:center;box-shadow:0 6px 18px rgba(16,24,58,.12)}
+  .mcard .mscrim{position:absolute;inset:0;background:linear-gradient(to top,rgba(7,16,45,.8),transparent 55%)}
+  .mcard .mnm{position:absolute;left:12px;bottom:10px;color:#fff;font-weight:700;font-size:15px;z-index:2}
+  .flag{position:absolute;top:8px;left:8px;background:var(--c2);color:#06352f;font-weight:800;font-size:10px;padding:3px 9px;border-radius:10px;z-index:2}
+  .m-empty{background:#fff;border:1px solid var(--line);border-radius:20px;padding:54px 30px;text-align:center;color:var(--muted)}
 
   /* match popup */
-  .overlay{position:absolute;inset:0;background:rgba(0,0,0,.55);z-index:40;display:flex;align-items:center;justify-content:center;animation:fade .2s}
-  @keyframes fade{from{opacity:0}to{opacity:1}}
-  .match-modal{background:var(--grad);width:88%;max-width:360px;border-radius:26px;padding:34px 26px;text-align:center;color:#fff}
-  .match-modal h2{font-size:34px;font-weight:800;font-style:italic;margin-bottom:8px}
-  .match-modal p{opacity:.95;font-size:15px;margin-bottom:22px}
-  .match-avatars{display:flex;justify-content:center;margin-bottom:22px}
-  .match-avatars img{width:96px;height:96px;border-radius:50%;border:4px solid #fff;object-fit:cover}
-  .match-avatars img:nth-child(2){margin-left:-22px}
-  .match-modal .btn-w{display:block;width:100%;background:#fff;color:var(--pink);border:none;padding:14px;border-radius:30px;font-weight:700;margin-bottom:12px;cursor:pointer}
-  .match-modal .btn-ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.6)}
+  .match-modal{background:var(--grad);width:100%;max-width:380px;border-radius:26px;padding:36px 28px;text-align:center;color:#fff}
+  .match-modal h2{font-size:34px;font-weight:900;font-style:italic;margin-bottom:8px}
+  .match-modal p{opacity:.95;margin-bottom:22px}
+  .m-avs{display:flex;justify-content:center;margin-bottom:22px}
+  .m-avs img{width:96px;height:96px;border-radius:50%;border:4px solid #fff;object-fit:cover}
+  .m-avs img:nth-child(2){margin-left:-20px}
 </style>
 </head>
 <body>
@@ -115,13 +213,10 @@
 <script>
 const {
   useState,
-  useRef,
   useMemo
 } = React;
-
-// ---------- sample data ----------
 const INTERESTS = ["Viajar", "Café", "Fitness", "Música", "Cocina", "Cine", "Senderismo", "Arte", "Fotografía", "Yoga", "Gaming", "Vino", "Lectura", "Playa", "Perros", "Baile"];
-const pick = (arr, n) => [...arr].sort(() => Math.random() - .5).slice(0, n);
+const INTENTS = ["Cualquiera", "Algo serio", "Algo casual", "Conocer gente"];
 const PROFILES = [{
   id: 1,
   name: "Sofía",
@@ -255,9 +350,296 @@ const PROFILES = [{
   img: "https://randomuser.me/api/portraits/men/22.jpg",
   interests: ["Fitness", "Cine", "Café", "Viajar"]
 }];
-const INTENTS = ["Cualquiera", "Algo serio", "Algo casual", "Conocer gente"];
+const STORIES = [{
+  n: "Elena & Giulia",
+  t: "Hicimos match un martes cualquiera. Hoy adoptamos un gato y vivimos juntas.",
+  img: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800&q=80&auto=format&fit=crop"
+}, {
+  n: "Amanda & Miguel",
+  t: "Coincidimos el mismo día que me uní. Llevamos dos años y nos casamos pronto.",
+  img: "https://images.unsplash.com/photo-1522098635833-216c03d81fbe?w=800&q=80&auto=format&fit=crop"
+}, {
+  n: "Carla & Andrés",
+  t: "Tres citas con café y mil conversaciones después, encontramos nuestra vibra.",
+  img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&q=80&auto=format&fit=crop"
+}];
+function Logo() {
+  return /*#__PURE__*/React.createElement("span", {
+    className: "logo"
+  }, "vibra", /*#__PURE__*/React.createElement("span", {
+    className: "dot"
+  }, "."));
+}
 function App() {
-  const [tab, setTab] = useState("deck"); // deck | filters | matches
+  const [view, setView] = useState("home"); // home | explore
+  const [auth, setAuth] = useState(null); // null | "login" | "signup"
+
+  const goExplore = () => {
+    setAuth(null);
+    setView("explore");
+  };
+  return /*#__PURE__*/React.createElement(React.Fragment, null, view === "home" && /*#__PURE__*/React.createElement(Landing, {
+    onAuth: setAuth,
+    onExplore: goExplore
+  }), view === "explore" && /*#__PURE__*/React.createElement(Explore, {
+    onHome: () => setView("home")
+  }), auth && /*#__PURE__*/React.createElement(AuthModal, {
+    mode: auth,
+    setMode: setAuth,
+    onClose: () => setAuth(null),
+    onDone: goExplore
+  }));
+}
+
+/* ================= LANDING ================= */
+function Landing({
+  onAuth,
+  onExplore
+}) {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("header", {
+    className: "nav"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "wrap nav-inner"
+  }, /*#__PURE__*/React.createElement(Logo, null), /*#__PURE__*/React.createElement("nav", {
+    className: "nav-links"
+  }, /*#__PURE__*/React.createElement("a", {
+    href: "#como"
+  }, "Cómo funciona"), /*#__PURE__*/React.createElement("a", {
+    href: "#porque"
+  }, "Por qué Vibra"), /*#__PURE__*/React.createElement("a", {
+    href: "#historias"
+  }, "Historias")), /*#__PURE__*/React.createElement("div", {
+    className: "nav-right"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "link-btn",
+    onClick: () => onAuth("login")
+  }, "Iniciar sesión"), /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-primary",
+    onClick: () => onAuth("signup")
+  }, "Crear cuenta")))), /*#__PURE__*/React.createElement("section", {
+    className: "hero"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "wrap hero-inner"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, "Conecta con tu vibra."), /*#__PURE__*/React.createElement("p", {
+    className: "sub"
+  }, "Conoce gente nueva cerca de ti, filtra lo que buscas y haz match con quien tenga tu misma energía."), /*#__PURE__*/React.createElement("div", {
+    className: "hero-cta"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-white",
+    onClick: () => onAuth("signup")
+  }, "Crear cuenta gratis"), /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-ghost",
+    onClick: onExplore
+  }, "Explorar perfiles")), /*#__PURE__*/React.createElement("div", {
+    className: "hero-trust"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "avatars"
+  }, /*#__PURE__*/React.createElement("img", {
+    src: "https://randomuser.me/api/portraits/women/68.jpg"
+  }), /*#__PURE__*/React.createElement("img", {
+    src: "https://randomuser.me/api/portraits/men/32.jpg"
+  }), /*#__PURE__*/React.createElement("img", {
+    src: "https://randomuser.me/api/portraits/women/44.jpg"
+  }), /*#__PURE__*/React.createElement("img", {
+    src: "https://randomuser.me/api/portraits/men/64.jpg"
+  })), /*#__PURE__*/React.createElement("span", null, "+12.000 personas conectando cerca de ti"))), /*#__PURE__*/React.createElement("div", {
+    className: "hero-art"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "h-card c-a",
+    style: {
+      backgroundImage: "url(https://randomuser.me/api/portraits/men/75.jpg)"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "hc-info"
+  }, "Diego, 29")), /*#__PURE__*/React.createElement("div", {
+    className: "h-card c-b",
+    style: {
+      backgroundImage: "url(https://randomuser.me/api/portraits/women/65.jpg)"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "hc-info"
+  }, "Camila, 26")), /*#__PURE__*/React.createElement("div", {
+    className: "h-badge like"
+  }, "♥ LIKE"), /*#__PURE__*/React.createElement("div", {
+    className: "h-badge nope"
+  }, "✕ NOPE")))), /*#__PURE__*/React.createElement("section", {
+    className: "block",
+    id: "como"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "wrap"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "sec-head"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "eyebrow"
+  }, "Así de fácil"), /*#__PURE__*/React.createElement("h2", null, "Cómo funciona"), /*#__PURE__*/React.createElement("p", null, "Tres pasos para empezar a conocer gente con tu misma vibra.")), /*#__PURE__*/React.createElement("div", {
+    className: "steps"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "step"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ic"
+  }, "📝"), /*#__PURE__*/React.createElement("h3", null, "1. Crea tu perfil"), /*#__PURE__*/React.createElement("p", null, "Sube tus mejores fotos y cuenta qué te hace único en segundos.")), /*#__PURE__*/React.createElement("div", {
+    className: "step"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ic"
+  }, "🔎"), /*#__PURE__*/React.createElement("h3", null, "2. Filtra y descubre"), /*#__PURE__*/React.createElement("p", null, "Define edad, distancia e intereses. Te mostramos a quienes encajan.")), /*#__PURE__*/React.createElement("div", {
+    className: "step"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ic"
+  }, "💬"), /*#__PURE__*/React.createElement("h3", null, "3. Haz match y habla"), /*#__PURE__*/React.createElement("p", null, "Si ambos se dan like, es match. Empieza la conversación al instante."))))), /*#__PURE__*/React.createElement("section", {
+    className: "block feat",
+    id: "porque"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "wrap"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "sec-head"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "eyebrow"
+  }, "Por qué Vibra"), /*#__PURE__*/React.createElement("h2", null, "Hecho para conexiones reales"), /*#__PURE__*/React.createElement("p", null, "Herramientas pensadas para que conozcas a la persona correcta, no a cualquiera.")), /*#__PURE__*/React.createElement("div", {
+    className: "feat-grid"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "feat-card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ic"
+  }, "🎯"), /*#__PURE__*/React.createElement("h4", null, "Filtros precisos"), /*#__PURE__*/React.createElement("p", null, "Busca por intención, intereses, edad y distancia.")), /*#__PURE__*/React.createElement("div", {
+    className: "feat-card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ic"
+  }, "🛡️"), /*#__PURE__*/React.createElement("h4", null, "Perfiles seguros"), /*#__PURE__*/React.createElement("p", null, "Verificación y reportes para una comunidad sana.")), /*#__PURE__*/React.createElement("div", {
+    className: "feat-card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ic"
+  }, "⚡"), /*#__PURE__*/React.createElement("h4", null, "Matches al instante"), /*#__PURE__*/React.createElement("p", null, "Te avisamos en el momento en que el like es mutuo.")), /*#__PURE__*/React.createElement("div", {
+    className: "feat-card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ic"
+  }, "📍"), /*#__PURE__*/React.createElement("h4", null, "Cerca de ti"), /*#__PURE__*/React.createElement("p", null, "Descubre personas en tu zona, listas para conocerte."))))), /*#__PURE__*/React.createElement("section", {
+    className: "block",
+    id: "historias"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "wrap"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "sec-head"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "eyebrow"
+  }, "Historias Vibra"), /*#__PURE__*/React.createElement("h2", null, "Empezó con un match"), /*#__PURE__*/React.createElement("p", null, "Parejas reales que se conocieron buscando su vibra. (Fotos ilustrativas.)")), /*#__PURE__*/React.createElement("div", {
+    className: "stories"
+  }, STORIES.map(s => /*#__PURE__*/React.createElement("div", {
+    className: "story",
+    key: s.n,
+    style: {
+      backgroundImage: `url(${s.img})`
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "st-scrim"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "st-txt"
+  }, /*#__PURE__*/React.createElement("h4", null, s.n), /*#__PURE__*/React.createElement("p", null, s.t))))))), /*#__PURE__*/React.createElement("section", {
+    className: "block",
+    style: {
+      paddingTop: 0
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "wrap"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "cta-band"
+  }, /*#__PURE__*/React.createElement("h2", null, "Tu próxima conexión te espera"), /*#__PURE__*/React.createElement("p", null, "Únete gratis y empieza a hacer match hoy mismo."), /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-white",
+    onClick: () => onAuth("signup")
+  }, "Crear cuenta gratis")))), /*#__PURE__*/React.createElement("footer", null, /*#__PURE__*/React.createElement("div", {
+    className: "wrap"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "foot-grid"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Logo, null), /*#__PURE__*/React.createElement("p", {
+    style: {
+      marginTop: 12,
+      color: "#aab1cc",
+      fontSize: 14,
+      maxWidth: 260
+    }
+  }, "La forma más fácil de conocer gente nueva y empezar algo real.")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h5", null, "Producto"), /*#__PURE__*/React.createElement("ul", null, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+    href: "#como"
+  }, "Cómo funciona")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+    href: "#porque"
+  }, "Funciones")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+    href: "#historias"
+  }, "Historias")))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h5", null, "Empresa"), /*#__PURE__*/React.createElement("ul", null, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+    href: "#"
+  }, "Sobre nosotros")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+    href: "#"
+  }, "Trabaja con nosotros")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+    href: "#"
+  }, "Prensa")))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h5", null, "Legal"), /*#__PURE__*/React.createElement("ul", null, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+    href: "#"
+  }, "Privacidad")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+    href: "#"
+  }, "Términos")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+    href: "#"
+  }, "Cookies"))))), /*#__PURE__*/React.createElement("div", {
+    className: "foot-bottom"
+  }, /*#__PURE__*/React.createElement("span", null, "© 2026 Vibra. Todos los derechos reservados."), /*#__PURE__*/React.createElement("span", null, "Hecho con 💙 en Miami")))));
+}
+
+/* ================= AUTH MODAL ================= */
+function AuthModal({
+  mode,
+  setMode,
+  onClose,
+  onDone
+}) {
+  const isLogin = mode === "login";
+  return /*#__PURE__*/React.createElement("div", {
+    className: "overlay",
+    onClick: onClose
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "modal",
+    onClick: e => e.stopPropagation()
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "x",
+    onClick: onClose
+  }, "×"), /*#__PURE__*/React.createElement("div", {
+    className: "logo",
+    style: {
+      textAlign: "center"
+    }
+  }, "vibra", /*#__PURE__*/React.createElement("span", {
+    className: "dot"
+  }, ".")), /*#__PURE__*/React.createElement("p", {
+    className: "tagline"
+  }, isLogin ? "Bienvenido de vuelta" : "Crea tu cuenta gratis"), /*#__PURE__*/React.createElement("div", {
+    className: "tabs"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: isLogin ? "on" : "",
+    onClick: () => setMode("login")
+  }, "Iniciar sesión"), /*#__PURE__*/React.createElement("button", {
+    className: !isLogin ? "on" : "",
+    onClick: () => setMode("signup")
+  }, "Registrarse")), /*#__PURE__*/React.createElement("form", {
+    className: "form",
+    onSubmit: e => {
+      e.preventDefault();
+      onDone();
+    }
+  }, !isLogin && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("label", null, "Nombre"), /*#__PURE__*/React.createElement("input", {
+    placeholder: "Tu nombre"
+  })), /*#__PURE__*/React.createElement("label", null, "Correo electrónico"), /*#__PURE__*/React.createElement("input", {
+    type: "email",
+    placeholder: "tucorreo@ejemplo.com"
+  }), /*#__PURE__*/React.createElement("label", null, "Contraseña"), /*#__PURE__*/React.createElement("input", {
+    type: "password",
+    placeholder: "••••••••"
+  }), /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-primary btn-block",
+    type: "submit"
+  }, isLogin ? "Entrar" : "Crear cuenta y explorar")), /*#__PURE__*/React.createElement("p", {
+    className: "fine"
+  }, "Demo: cualquier dato te lleva a explorar perfiles.")));
+}
+
+/* ================= EXPLORE ================= */
+function Explore({
+  onHome
+}) {
+  const [page, setPage] = useState("discover"); // discover | matches
   const [filters, setFilters] = useState({
     gender: "F",
     minAge: 21,
@@ -266,11 +648,10 @@ function App() {
     intent: "Cualquiera",
     interest: "Todos"
   });
-  const [draft, setDraft] = useState(filters);
-  const [liked, setLiked] = useState([]);
   const [seen, setSeen] = useState([]);
-  const [matchPopup, setMatchPopup] = useState(null);
-  const filtered = useMemo(() => PROFILES.filter(p => {
+  const [liked, setLiked] = useState([]);
+  const [popup, setPopup] = useState(null);
+  const list = useMemo(() => PROFILES.filter(p => {
     if (seen.includes(p.id)) return false;
     if (filters.gender !== "Todos" && p.gender !== filters.gender) return false;
     if (p.age < filters.minAge || p.age > filters.maxAge) return false;
@@ -279,404 +660,222 @@ function App() {
     if (filters.interest !== "Todos" && !p.interests.includes(filters.interest)) return false;
     return true;
   }), [filters, seen]);
-  const handleSwipe = (profile, dir) => {
-    setSeen(s => [...s, profile.id]);
+  const current = list[0];
+  const decide = dir => {
+    if (!current) return;
+    setSeen(s => [...s, current.id]);
     if (dir === "like" || dir === "super") {
       setLiked(l => [...l, {
-        ...profile,
-        isNew: true,
+        ...current,
         sup: dir === "super"
       }]);
-      // ~55% chance of mutual match for the demo
-      if (Math.random() < 0.55 || dir === "super") setMatchPopup(profile);
+      if (dir === "super" || Math.random() < 0.55) setPopup(current);
     }
   };
-  const reset = () => {
+  const resetSeen = () => setSeen([]);
+  const setF = (k, v) => {
+    setFilters(f => ({
+      ...f,
+      [k]: v
+    }));
     setSeen([]);
   };
   return /*#__PURE__*/React.createElement("div", {
-    className: "phone"
+    className: "ex-shell"
+  }, /*#__PURE__*/React.createElement("header", {
+    className: "ex-top"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "topbar"
-  }, /*#__PURE__*/React.createElement("button", {
-    className: "icon-btn",
-    onClick: () => {
-      setDraft(filters);
-      setTab("filters");
-    }
-  }, "⚙︎"), /*#__PURE__*/React.createElement("div", {
-    className: "logo"
-  }, "spark"), /*#__PURE__*/React.createElement("button", {
-    className: "icon-btn",
-    onClick: () => setTab("matches")
-  }, "♥")), tab === "deck" || tab === "matches" || tab === "filters" ? null : null, /*#__PURE__*/React.createElement(Deck, {
-    profiles: filtered,
-    onSwipe: handleSwipe,
-    onReset: reset,
-    totalSeen: seen.length
-  }), /*#__PURE__*/React.createElement("div", {
-    className: "nav"
-  }, /*#__PURE__*/React.createElement("button", {
-    className: tab === "deck" ? "active" : "",
-    onClick: () => setTab("deck")
-  }, "🔥"), /*#__PURE__*/React.createElement("button", {
-    className: tab === "filters" ? "active" : "",
-    onClick: () => {
-      setDraft(filters);
-      setTab("filters");
-    }
-  }, "🔍"), /*#__PURE__*/React.createElement("button", {
-    className: tab === "matches" ? "active" : "",
-    onClick: () => setTab("matches")
-  }, "♥", liked.length > 0 && /*#__PURE__*/React.createElement("span", {
-    className: "badge"
-  }, liked.length))), tab === "filters" && /*#__PURE__*/React.createElement(Filters, {
-    draft: draft,
-    setDraft: setDraft,
-    onClose: () => setTab("deck"),
-    onApply: () => {
-      setFilters(draft);
-      setSeen([]);
-      setTab("deck");
-    }
-  }), tab === "matches" && /*#__PURE__*/React.createElement(Matches, {
-    liked: liked,
-    onClose: () => setTab("deck")
-  }), matchPopup && /*#__PURE__*/React.createElement(MatchPopup, {
-    profile: matchPopup,
-    onClose: () => setMatchPopup(null)
-  }));
-}
-
-// ---------- swipe deck ----------
-function Deck({
-  profiles,
-  onSwipe,
-  onReset,
-  totalSeen
-}) {
-  if (profiles.length === 0) {
-    return /*#__PURE__*/React.createElement("div", {
-      className: "deck-wrap"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "empty"
-    }, /*#__PURE__*/React.createElement("div", {
-      style: {
-        fontSize: 54
-      }
-    }, "🎉"), /*#__PURE__*/React.createElement("h3", null, "No hay más perfiles"), /*#__PURE__*/React.createElement("p", null, "Ajusta tus filtros o vuelve a empezar para ver más personas."), totalSeen > 0 && /*#__PURE__*/React.createElement("button", {
-      className: "btn",
-      onClick: onReset
-    }, "Volver a empezar")));
-  }
-  // top card is last in array for stacking; we render top = profiles[0]
-  const top = profiles[0];
-  const behind = profiles.slice(1, 3).reverse();
-  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
-    className: "deck-wrap"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "deck"
-  }, behind.map((p, i) => /*#__PURE__*/React.createElement("div", {
-    key: p.id,
-    className: "card",
+    className: "wrap ex-top-inner"
+  }, /*#__PURE__*/React.createElement("span", {
+    onClick: onHome,
     style: {
-      backgroundImage: `url(${p.img})`,
-      transform: `scale(${0.94 + i * 0.03}) translateY(${(behind.length - i) * 8}px)`,
-      filter: "brightness(.9)"
+      cursor: "pointer"
     }
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "scrim"
-  }))), /*#__PURE__*/React.createElement(SwipeCard, {
-    key: top.id,
-    profile: top,
-    onSwipe: onSwipe
-  }))), /*#__PURE__*/React.createElement(Actions, {
-    onAction: dir => onSwipe(top, dir)
-  }));
-}
-function SwipeCard({
-  profile,
-  onSwipe
-}) {
-  const ref = useRef(null);
-  const state = useRef({
-    dragging: false,
-    startX: 0,
-    startY: 0,
-    x: 0,
-    y: 0
-  });
-  const setStamp = x => {
-    const card = ref.current;
-    if (!card) return;
-    const like = card.querySelector(".stamp.like"),
-      nope = card.querySelector(".stamp.nope");
-    like.style.opacity = x > 0 ? Math.min(x / 120, 1) : 0;
-    nope.style.opacity = x < 0 ? Math.min(-x / 120, 1) : 0;
-  };
-  const apply = (x, y, rot) => {
-    if (ref.current) ref.current.style.transform = `translate(${x}px,${y}px) rotate(${rot}deg)`;
-  };
-  const down = e => {
-    state.current.dragging = true;
-    const pt = e.touches ? e.touches[0] : e;
-    state.current.startX = pt.clientX;
-    state.current.startY = pt.clientY;
-    if (ref.current) ref.current.style.transition = "none";
-  };
-  const move = e => {
-    if (!state.current.dragging) return;
-    const pt = e.touches ? e.touches[0] : e;
-    const x = pt.clientX - state.current.startX,
-      y = pt.clientY - state.current.startY;
-    state.current.x = x;
-    state.current.y = y;
-    apply(x, y, x * 0.06);
-    setStamp(x);
-  };
-  const up = () => {
-    if (!state.current.dragging) return;
-    state.current.dragging = false;
-    const x = state.current.x;
-    if (ref.current) ref.current.style.transition = "transform .35s ease";
-    if (x > 110) {
-      fly(1);
-    } else if (x < -110) {
-      fly(-1);
-    } else {
-      apply(0, 0, 0);
-      setStamp(0);
-    }
-  };
-  const fly = dir => {
-    apply(dir * 600, state.current.y, dir * 25);
-    setTimeout(() => onSwipe(profile, dir > 0 ? "like" : "nope"), 280);
-  };
-  return /*#__PURE__*/React.createElement("div", {
-    ref: ref,
-    className: "card",
-    style: {
-      backgroundImage: `url(${profile.img})`
-    },
-    onMouseDown: down,
-    onMouseMove: move,
-    onMouseUp: up,
-    onMouseLeave: up,
-    onTouchStart: down,
-    onTouchMove: move,
-    onTouchEnd: up
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "stamp like"
-  }, "LIKE"), /*#__PURE__*/React.createElement("div", {
-    className: "stamp nope"
-  }, "NOPE"), /*#__PURE__*/React.createElement("div", {
-    className: "scrim"
-  }), /*#__PURE__*/React.createElement("div", {
-    className: "info"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "name"
-  }, profile.name, /*#__PURE__*/React.createElement("span", {
-    className: "age"
-  }, profile.age)), /*#__PURE__*/React.createElement("div", {
-    className: "meta"
-  }, "📍 ", profile.city, " · a ", profile.dist, " km"), /*#__PURE__*/React.createElement("span", {
-    className: "intent-pill"
-  }, profile.intent), /*#__PURE__*/React.createElement("div", {
-    className: "bio"
-  }, profile.bio), /*#__PURE__*/React.createElement("div", {
-    className: "tags"
-  }, profile.interests.map(t => /*#__PURE__*/React.createElement("span", {
-    className: "tag",
-    key: t
-  }, t)))));
-}
-function Actions({
-  onAction
-}) {
-  return /*#__PURE__*/React.createElement("div", {
-    className: "actions"
+  }, /*#__PURE__*/React.createElement(Logo, null)), /*#__PURE__*/React.createElement("div", {
+    className: "ex-tabs"
   }, /*#__PURE__*/React.createElement("button", {
-    className: "act rewind small",
-    title: "Deshacer",
-    onClick: () => {}
-  }, "↩"), /*#__PURE__*/React.createElement("button", {
-    className: "act nope",
-    title: "No me gusta",
-    onClick: () => onAction("nope")
-  }, "✕"), /*#__PURE__*/React.createElement("button", {
-    className: "act star small",
-    title: "Super like",
-    onClick: () => onAction("super")
-  }, "★"), /*#__PURE__*/React.createElement("button", {
-    className: "act like",
-    title: "Me gusta",
-    onClick: () => onAction("like")
-  }, "♥"), /*#__PURE__*/React.createElement("button", {
-    className: "act boost small",
-    title: "Boost",
-    onClick: () => {}
-  }, "⚡"));
-}
-
-// ---------- filters ----------
-function Filters({
-  draft,
-  setDraft,
-  onClose,
-  onApply
-}) {
-  const set = (k, v) => setDraft(d => ({
-    ...d,
-    [k]: v
-  }));
-  return /*#__PURE__*/React.createElement("div", {
-    className: "panel"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "panel-head"
-  }, /*#__PURE__*/React.createElement("button", {
-    className: "icon-btn",
-    onClick: onClose
-  }, "✕"), /*#__PURE__*/React.createElement("h2", null, "Filtros de búsqueda"), /*#__PURE__*/React.createElement("span", {
-    style: {
-      width: 40
-    }
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "panel-body"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "field"
+    className: page === "discover" ? "on" : "",
+    onClick: () => setPage("discover")
+  }, "Descubrir"), /*#__PURE__*/React.createElement("button", {
+    className: page === "matches" ? "on" : "",
+    onClick: () => setPage("matches")
+  }, "Matches", liked.length > 0 ? ` (${liked.length})` : "")), /*#__PURE__*/React.createElement("div", {
+    className: "ex-av",
+    onClick: onHome,
+    title: "Inicio"
+  }, "R"))), /*#__PURE__*/React.createElement("div", {
+    className: "wrap ex-body"
+  }, /*#__PURE__*/React.createElement("aside", {
+    className: "filters"
+  }, /*#__PURE__*/React.createElement("h3", null, "Filtros"), /*#__PURE__*/React.createElement("div", {
+    className: "f-field"
   }, /*#__PURE__*/React.createElement("label", null, "Mostrarme"), /*#__PURE__*/React.createElement("div", {
     className: "seg"
   }, [["F", "Mujeres"], ["M", "Hombres"], ["Todos", "Todos"]].map(([v, l]) => /*#__PURE__*/React.createElement("button", {
     key: v,
-    className: draft.gender === v ? "on" : "",
-    onClick: () => set("gender", v)
+    className: filters.gender === v ? "on" : "",
+    onClick: () => setF("gender", v)
   }, l)))), /*#__PURE__*/React.createElement("div", {
-    className: "field"
+    className: "f-field"
   }, /*#__PURE__*/React.createElement("label", null, "Edad: ", /*#__PURE__*/React.createElement("span", {
     className: "val"
-  }, draft.minAge, " – ", draft.maxAge)), /*#__PURE__*/React.createElement("div", {
+  }, filters.minAge, "–", filters.maxAge)), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
-      gap: 12,
-      alignItems: "center"
+      gap: 10
     }
   }, /*#__PURE__*/React.createElement("input", {
     type: "range",
     min: "18",
     max: "60",
-    value: draft.minAge,
-    onChange: e => set("minAge", Math.min(+e.target.value, draft.maxAge))
+    value: filters.minAge,
+    onChange: e => setF("minAge", Math.min(+e.target.value, filters.maxAge))
   }), /*#__PURE__*/React.createElement("input", {
     type: "range",
     min: "18",
     max: "60",
-    value: draft.maxAge,
-    onChange: e => set("maxAge", Math.max(+e.target.value, draft.minAge))
+    value: filters.maxAge,
+    onChange: e => setF("maxAge", Math.max(+e.target.value, filters.minAge))
   }))), /*#__PURE__*/React.createElement("div", {
-    className: "field"
-  }, /*#__PURE__*/React.createElement("label", null, "Distancia máxima: ", /*#__PURE__*/React.createElement("span", {
+    className: "f-field"
+  }, /*#__PURE__*/React.createElement("label", null, "Distancia: ", /*#__PURE__*/React.createElement("span", {
     className: "val"
-  }, draft.maxDist, " km")), /*#__PURE__*/React.createElement("input", {
+  }, filters.maxDist, " km")), /*#__PURE__*/React.createElement("input", {
     type: "range",
     min: "1",
     max: "100",
-    value: draft.maxDist,
-    onChange: e => set("maxDist", +e.target.value)
+    value: filters.maxDist,
+    onChange: e => setF("maxDist", +e.target.value)
   })), /*#__PURE__*/React.createElement("div", {
-    className: "field"
+    className: "f-field"
   }, /*#__PURE__*/React.createElement("label", null, "Busco"), /*#__PURE__*/React.createElement("div", {
-    className: "seg"
+    className: "seg",
+    style: {
+      flexDirection: "column"
+    }
   }, INTENTS.map(v => /*#__PURE__*/React.createElement("button", {
     key: v,
-    className: draft.intent === v ? "on" : "",
-    onClick: () => set("intent", v)
+    className: filters.intent === v ? "on" : "",
+    onClick: () => setF("intent", v)
   }, v)))), /*#__PURE__*/React.createElement("div", {
-    className: "field"
-  }, /*#__PURE__*/React.createElement("label", null, "Intereses"), /*#__PURE__*/React.createElement("div", {
-    className: "seg"
-  }, ["Todos", ...INTERESTS.slice(0, 8)].map(v => /*#__PURE__*/React.createElement("button", {
+    className: "f-field",
+    style: {
+      marginBottom: 0
+    }
+  }, /*#__PURE__*/React.createElement("label", null, "Interés"), /*#__PURE__*/React.createElement("div", {
+    className: "chips"
+  }, ["Todos", ...INTERESTS.slice(0, 8)].map(v => /*#__PURE__*/React.createElement("span", {
     key: v,
-    className: draft.interest === v ? "on" : "",
-    onClick: () => set("interest", v)
-  }, v))))), /*#__PURE__*/React.createElement("button", {
-    className: "btn apply",
-    onClick: onApply
-  }, "Aplicar filtros"));
-}
-
-// ---------- matches ----------
-function Matches({
-  liked,
-  onClose
-}) {
-  return /*#__PURE__*/React.createElement("div", {
-    className: "panel"
+    className: "chip" + (filters.interest === v ? " on" : ""),
+    onClick: () => setF("interest", v)
+  }, v))))), /*#__PURE__*/React.createElement("main", null, page === "discover" && (current ? /*#__PURE__*/React.createElement("div", {
+    className: "discover"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "panel-head"
+    className: "pcard"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "photo",
+    style: {
+      backgroundImage: `url(${current.img})`
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "pscrim"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "pmeta"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "nm"
+  }, current.name, /*#__PURE__*/React.createElement("span", {
+    className: "ag"
+  }, current.age)), /*#__PURE__*/React.createElement("div", {
+    className: "loc"
+  }, "📍 ", current.city, " · a ", current.dist, " km"), /*#__PURE__*/React.createElement("span", {
+    className: "ipill"
+  }, current.intent))), /*#__PURE__*/React.createElement("div", {
+    className: "pbody"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "bio"
+  }, current.bio), /*#__PURE__*/React.createElement("div", {
+    className: "tags"
+  }, current.interests.map(t => /*#__PURE__*/React.createElement("span", {
+    className: "tag",
+    key: t
+  }, t)))), /*#__PURE__*/React.createElement("div", {
+    className: "pactions"
   }, /*#__PURE__*/React.createElement("button", {
-    className: "icon-btn",
-    onClick: onClose
-  }, "✕"), /*#__PURE__*/React.createElement("h2", null, "Tus likes (", liked.length, ")"), /*#__PURE__*/React.createElement("span", {
-    style: {
-      width: 40
-    }
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "panel-body"
-  }, liked.length === 0 ? /*#__PURE__*/React.createElement("div", {
-    className: "matches-empty"
+    className: "act rewind sm",
+    title: "Deshacer",
+    onClick: () => {}
+  }, "↩"), /*#__PURE__*/React.createElement("button", {
+    className: "act pass",
+    title: "Pasar",
+    onClick: () => decide("pass")
+  }, "✕"), /*#__PURE__*/React.createElement("button", {
+    className: "act star sm",
+    title: "Super like",
+    onClick: () => decide("super")
+  }, "★"), /*#__PURE__*/React.createElement("button", {
+    className: "act like",
+    title: "Me gusta",
+    onClick: () => decide("like")
+  }, "♥")))) : /*#__PURE__*/React.createElement("div", {
+    className: "discover"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "empty"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "big"
+  }, "🎉"), /*#__PURE__*/React.createElement("h3", null, "No hay más perfiles"), /*#__PURE__*/React.createElement("p", null, "Ajusta tus filtros o empieza de nuevo para ver más personas."), seen.length > 0 && /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-primary",
+    onClick: resetSeen
+  }, "Volver a empezar")))), page === "matches" && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "mtitle"
+  }, "Tus matches ", liked.length > 0 ? `(${liked.length})` : ""), liked.length === 0 ? /*#__PURE__*/React.createElement("div", {
+    className: "m-empty"
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      fontSize: 50,
-      marginBottom: 14
+      fontSize: 48,
+      marginBottom: 12
     }
-  }, "💘"), /*#__PURE__*/React.createElement("p", null, "Aún no has dado like a nadie.", /*#__PURE__*/React.createElement("br", null), "Desliza a la derecha para empezar.")) : /*#__PURE__*/React.createElement("div", {
+  }, "💙"), "Aún no tienes matches. Dale like a alguien en “Descubrir”.") : /*#__PURE__*/React.createElement("div", {
     className: "mgrid"
   }, liked.slice().reverse().map(p => /*#__PURE__*/React.createElement("div", {
-    key: p.id,
     className: "mcard",
+    key: p.id,
     style: {
       backgroundImage: `url(${p.img})`
     }
   }, p.sup && /*#__PURE__*/React.createElement("span", {
-    className: "new-flag",
+    className: "flag",
     style: {
-      background: "#1ec3ff"
+      background: "#1b9dff",
+      color: "#fff"
     }
-  }, "★ SUPER"), !p.sup && p.isNew && /*#__PURE__*/React.createElement("span", {
-    className: "new-flag"
-  }, "NUEVO"), /*#__PURE__*/React.createElement("div", {
+  }, "★ SUPER"), /*#__PURE__*/React.createElement("div", {
     className: "mscrim"
   }), /*#__PURE__*/React.createElement("div", {
-    className: "mname"
-  }, p.name, ", ", p.age))))));
-}
-
-// ---------- match popup ----------
-function MatchPopup({
-  profile,
-  onClose
-}) {
-  return /*#__PURE__*/React.createElement("div", {
+    className: "mnm"
+  }, p.name, ", ", p.age))))))), popup && /*#__PURE__*/React.createElement("div", {
     className: "overlay",
-    onClick: onClose
+    onClick: () => setPopup(null)
   }, /*#__PURE__*/React.createElement("div", {
     className: "match-modal",
     onClick: e => e.stopPropagation()
-  }, /*#__PURE__*/React.createElement("h2", null, "¡Es un match!"), /*#__PURE__*/React.createElement("p", null, "A ti y a ", profile.name, " les gustaron mutuamente."), /*#__PURE__*/React.createElement("div", {
-    className: "match-avatars"
+  }, /*#__PURE__*/React.createElement("h2", null, "¡Es un match!"), /*#__PURE__*/React.createElement("p", null, "A ti y a ", popup.name, " les gustaron mutuamente."), /*#__PURE__*/React.createElement("div", {
+    className: "m-avs"
   }, /*#__PURE__*/React.createElement("img", {
     src: "https://randomuser.me/api/portraits/lego/5.jpg",
     alt: "tú"
   }), /*#__PURE__*/React.createElement("img", {
-    src: profile.img,
-    alt: profile.name
+    src: popup.img,
+    alt: popup.name
   })), /*#__PURE__*/React.createElement("button", {
-    className: "btn-w",
-    onClick: onClose
+    className: "btn btn-white btn-block",
+    onClick: () => setPopup(null)
   }, "Enviar mensaje"), /*#__PURE__*/React.createElement("button", {
-    className: "btn-w btn-ghost",
-    onClick: onClose
-  }, "Seguir deslizando")));
+    className: "btn btn-ghost btn-block",
+    style: {
+      marginTop: 10
+    },
+    onClick: () => setPopup(null)
+  }, "Seguir explorando"))));
 }
 ReactDOM.createRoot(document.getElementById("root")).render(/*#__PURE__*/React.createElement(App, null));
 </script>
